@@ -67,6 +67,14 @@ while True:
 
         except:
             print ("data_upload_failed")
+            # Authorise Google Api
+            scope = ['https://spreadsheets.google.com/feeds',
+                     'https://www.googleapis.com/auth/drive']
+            google_cred = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+            gc = gspread.authorize(google_cred)
+
+            sheet = gc.open("SIOTData").sheet1  # Opens Spreadsheet in gDrive
+
             pass
         time.sleep(180)  # Sample data every minute
     except KeyboardInterrupt:
