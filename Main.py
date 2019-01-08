@@ -4,6 +4,7 @@ import json
 from oauth2client.service_account import ServiceAccountCredentials
 from weather_retrieve import weather
 from distance_retrieve_method2 import duration
+from datetime import datetime
 import time
 
 keys = json.load(open('keys.json'))  # json location of authorisation keys
@@ -31,6 +32,8 @@ destinations = [School, Work, UCD, Galway]  # selection of destinations to measu
 
 # Continuously run code
 while True:
+    time_updated = False  # reset
+
     try:
         times = []
         for i in range(0, len(destinations)):  # iterate through destinations
@@ -40,28 +43,30 @@ while True:
         time_updated = True  # Boolean to ascertain new data has been collected
     except:
         print ("cannot_retrieve_google_map_data")
-        continue
+        pass
     try:
         package = weather(keys["dark_sky_key"], Bayside, convert_unix=True)  # Calls function from weather_retrieve.py
         print "weather_data_retrieved"
-        
+
     except:
-        package = ['', '', '', '']  # Give empty cells if data retrieval fails
+        t = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        package = [t, '', '', '']  # Give empty cells if data retrieval fails
         print ("cannot_retrieve_weather_data")
-        continue
+        pass
 
     if time_updated:  # Avoid repeated data points if retrieval fails
         package += times  # concatenate lists
     else:
         for i in range(0, len(times)):
             package += ['']  # Give empty cells for failed data collection
+    print datetime.now()
 
     try:
         sheet.append_row(package)  # send package to spreadsheet
+        print "data_posted"
+
     except:
         print ("data_upload_failed")
-        continue
-    time_updated = False  # reset
-    print "data_posted"
-    time.sleep(60)  # Sample data every minute
+        pass
+    time.sleep(180)  # Sample data every minute
 
