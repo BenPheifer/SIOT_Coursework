@@ -33,40 +33,41 @@ destinations = [School, Work, UCD, Galway]  # selection of destinations to measu
 # Continuously run code
 while True:
     time_updated = False  # reset
-
     try:
-        times = []
-        for i in range(0, len(destinations)):  # iterate through destinations
-            print i
-            times.append(duration(keys["gmaps_key"], Home, destinations[i]))  # Calls function from distance_retrieve.py
-        print "google_map_data_retrieved"
-        time_updated = True  # Boolean to ascertain new data has been collected
-    except:
-        print ("cannot_retrieve_google_map_data")
-        pass
-    try:
-        package = weather(keys["dark_sky_key"], Bayside, convert_unix=True)  # Calls function from weather_retrieve.py
-        print "weather_data_retrieved"
+        try:
+            times = []
+            for i in range(0, len(destinations)):  # iterate through destinations
+                print i
+                times.append(duration(keys["gmaps_key"], Home, destinations[i]))  # Calls function from distance_retrieve.py
+            print "google_map_data_retrieved"
+            time_updated = True  # Boolean to ascertain new data has been collected
+        except:
+            print ("cannot_retrieve_google_map_data")
+            pass
+        try:
+            package = weather(keys["dark_sky_key"], Bayside, convert_unix=True)  # Calls function from weather_retrieve.py
+            print "weather_data_retrieved"
 
-    except:
-        t = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        package = [t, '', '', '']  # Give empty cells if data retrieval fails
-        print ("cannot_retrieve_weather_data")
-        pass
+        except:
+            t = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            package = [t, '', '', '']  # Give empty cells if data retrieval fails
+            print ("cannot_retrieve_weather_data")
+            pass
 
-    if time_updated:  # Avoid repeated data points if retrieval fails
-        package += times  # concatenate lists
-    else:
-        for i in range(0, len(times)):
-            package += ['']  # Give empty cells for failed data collection
-    print datetime.now()
+        if time_updated:  # Avoid repeated data points if retrieval fails
+            package += times  # concatenate lists
+        else:
+            for i in range(0, len(times)):
+                package += ['']  # Give empty cells for failed data collection
+        print datetime.now()
 
-    try:
-        sheet.append_row(package)  # send package to spreadsheet
-        print "data_posted"
+        try:
+            sheet.append_row(package)  # send package to spreadsheet
+            print "data_posted"
 
-    except:
-        print ("data_upload_failed")
-        pass
-    time.sleep(180)  # Sample data every minute
-
+        except:
+            print ("data_upload_failed")
+            pass
+        time.sleep(180)  # Sample data every minute
+    except KeyboardInterrupt:
+        break
