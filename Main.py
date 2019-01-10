@@ -5,7 +5,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 from weather_retrieve import weather
 from distance_retrieve_method2 import duration
 from datetime import datetime
+from runHTML import htmlwrite
 import time
+import webbrowser
 
 keys = json.load(open('keys.json'))  # json location of authorisation keys
 
@@ -27,6 +29,7 @@ Galway = ('53.2707676', '-9.057223')
 UCD = ('53.308201', '-6.2322493')
 Work = ('53.3495159','-6.256905')
 
+Browser_open = False
 
 destinations = [School, Work, UCD, Galway]  # selection of destinations to measure from home startpoint
 
@@ -76,6 +79,12 @@ while True:
             sheet = gc.open("SIOTData").sheet1  # Opens Spreadsheet in gDrive
 
             pass
-        time.sleep(180)  # Sample data every minute
+        htmlwrite("new.html", times[0], times[1], times[2], times[3])
+        print times[0]
+        if not Browser_open:
+            webbrowser.open_new_tab("new.html")
+            Browser_open = True
+        time.sleep(5)  # Sample data every minute
+
     except KeyboardInterrupt:
         break

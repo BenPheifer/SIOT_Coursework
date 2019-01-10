@@ -1,0 +1,40 @@
+body{
+		background-color:#000D1a		
+}
+
+.author{
+	text-align: center;
+	color:#b3ccff;
+	font-size:20px;
+	font-family:"Helvetica"
+}
+
+.author:hover{
+	color:red;
+}
+
+.updates:hover{
+	color:red;
+}
+
+.updates{
+    color:#FFe6e6;
+    font-size:16
+    font-family:"Helvetica"
+   	text-transform: lowercase;
+
+}
+.Title{
+	text-align: center;
+	color:#FFe6e6;
+	font-size:36px;
+	font-family:"Helvetica"
+
+}
+.Title.hover{
+    font-size:40px;
+}
+.map{
+	color:blue;
+	
+}
